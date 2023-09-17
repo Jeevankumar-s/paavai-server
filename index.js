@@ -1,9 +1,10 @@
 require('dotenv').config();
-const express= require('express');
+const express = require('express');
 const { Client } = require('pg');
 
 const app = express();
-const PORT=process.env.PORT || 3303
+app.use(express.json());
+const PORT = process.env.PORT || 3303;
 
 const connectionString = process.env.URL; // Replace with your actual ElephantSQL database URL.
 const client = new Client({
@@ -11,8 +12,8 @@ const client = new Client({
   ssl: { rejectUnauthorized: false },
 });
 
-
-client.connect()
+client
+  .connect()
   .then(() => {
     console.log('Connected to the database');
     // Create the "users" table.
@@ -34,11 +35,13 @@ client.connect()
     console.error('Error:', error);
   });
 
+app.get('/users', (req, res) => {
+  res.send({ jeev: "vanakkam" });
+  console.log('hiiii')
+});
 
-  app.get('/users',(res,req)=>{
-    res.send({jeev:"vanakkam"})
-  })
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
 
-  app.listen(PORT, ()=>{
-   console.log(`listening on port ${PORT}`) 
-  })
+module.exports = app;
