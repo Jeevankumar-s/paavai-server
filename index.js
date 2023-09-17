@@ -3,7 +3,7 @@ const express = require('express');
 const { Client } = require('pg');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
-
+const JWT_SECRET = process.env.JWT_SECRET
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3303;
@@ -54,11 +54,41 @@ app.post('/login', async(req, res) => {
     });
 });
 
-app.get('/users',async(req,res)=>{
-  const getUser=`select * from login;`;
-  const result=await client.query(getUser)
-  res.send(result);
-})
+// app.get('/users',async(req,res)=>{
+//   const getUser=`select * from login where username="20104035";`;
+//   const result=await client.query(getUser)
+//   res.send(result);
+// })
+app.post('/users', async (req, res) => {
+  const { username, password } = req.body;
+
+  // First, retrieve the user's data from the database based on the username.
+  const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
+
+  try {
+    const result = await client.query(getUserQuery, [username]);
+    // Check if a user with the provided username exists.
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Retrieve the stored hashed password from the database.
+    const storedHashedPassword = result.rows[0].password;
+    // Compare the provided password with the stored hashed password using bcrypt.
+    const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
+    if (passwordMatch) {
+      // Passwords match, so you can consider it as correct.
+      const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+      res.status(201).send({ "jeevToken": jwtToken });
+    } else {
+      // Passwords do not match.
+      res.status(401).json({ error: 'Password is incorrect' });
+    }
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 
