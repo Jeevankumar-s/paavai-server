@@ -92,6 +92,11 @@ app.post('/users', async (req, res) => {
   }
 });
 
+// app.get('/delete', async(req,res)=>{
+//   const delQuery=`select * from login;`;
+//   const resu=await client.query(delQuery)
+//   console.log(resu)
+// })
 
 
 app.listen(PORT, () => {
