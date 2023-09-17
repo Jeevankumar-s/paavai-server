@@ -56,7 +56,8 @@ app.post('/login', async(req, res) => {
 
 app.get('/users',async(req,res)=>{
   const getUser=`select * from login;`;
-  console.log(await client.query(getUser));
+  const result=await client.query(getUser)
+  res.send(result);
 })
 
 
