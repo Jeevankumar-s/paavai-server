@@ -37,29 +37,29 @@ client
     console.error('Error:', error);
   });
 
-app.post('/login', async(req, res) => {
-  const {username,password,type}=req.body;
-  const insertQuery = `INSERT INTO login (username, password, type) VALUES ($1, $2, $3) RETURNING *`;
-  const hashedPassword=await bcrypt.hash(password,5)
-  client
-    .query(insertQuery, [username, hashedPassword, type])
-    .then((result) => {
-      const insertedUser = result.rows[0];
-      res.status(201).json(insertedUser);
-      console.log('success')
-    })
-    .catch((error) => {
-      console.error('Error inserting user:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
-});
+// app.post('/login', async(req, res) => {
+//   const {username,password,type}=req.body;
+//   const insertQuery = `INSERT INTO login (username, password, type) VALUES ($1, $2, $3) RETURNING *`;
+//   const hashedPassword=await bcrypt.hash(password,5)
+//   client
+//     .query(insertQuery, [username, hashedPassword, type])
+//     .then((result) => {
+//       const insertedUser = result.rows[0];
+//       res.status(201).json(insertedUser);
+//       console.log('success')
+//     })
+//     .catch((error) => {
+//       console.error('Error inserting user:', error);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     });
+// });
 
 // app.get('/users',async(req,res)=>{
 //   const getUser=`select * from login where username="20104035";`;
 //   const result=await client.query(getUser)
 //   res.send(result);
 // })
-app.post('/users', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   // First, retrieve the user's data from the database based on the username.

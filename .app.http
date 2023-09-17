@@ -1,4 +1,4 @@
-POST http://localhost:3305/users 
+POST http://localhost:3305/login 
 Content-Type: application/json
 
 {
@@ -6,5 +6,3 @@ Content-Type: application/json
     "password":"27/02/2003"
 }
 
-###
-get http://localhost:3305/delete
