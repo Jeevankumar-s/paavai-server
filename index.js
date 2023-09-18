@@ -170,9 +170,9 @@ app.get('/history/:registerNo/', async (request, response) => {
     FROM
       outpass
     WHERE
-      registernumber = ${registerNo};`
-  const result = await db.all(getOutpass)
-  response.send(result)
+      registernumber = '${registerNo}';`
+  const result = await client.query(getOutpass)
+  response.send(result.rows)
 })
 
 

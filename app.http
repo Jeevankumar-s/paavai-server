@@ -10,3 +10,6 @@ Content-Type: application/json
     "semester":"7", 
     "reason":"veetuku poganum"
 }
+
+###
+GET http://localhost:3305/history/20104060 
