@@ -3,8 +3,10 @@ const express = require('express');
 const { Client } = require('pg');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
+const cors = require('cors'); 
 const app = express();
 app.use(express.json());
+app.use(cors()); 
 const PORT = process.env.PORT || 3303;
 
 const connectionString = process.env.URL; // Replace with your actual ElephantSQL database URL.
