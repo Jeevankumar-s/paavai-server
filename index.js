@@ -127,7 +127,7 @@ app.get('/delete', async(req,res)=>{
 app.get('/history',async(req,res)=>{
   const historyQuery=`select * from outpass`
   const result=await client.query(historyQuery)
-  res.send(result)
+  res.send(result.rows)
 })
 
 app.post('/outpass', async(req, res) => {
