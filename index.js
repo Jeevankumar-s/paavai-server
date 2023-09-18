@@ -4,6 +4,8 @@ const { Client } = require('pg');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 const cors = require('cors'); 
+const { format } = require('date-fns');
+const { utcToZonedTime } = require('date-fns-tz');
 const app = express();
 app.use(express.json());
 app.use(cors()); 
@@ -21,12 +23,18 @@ client
     console.log('Connected to the database');
     // Create the "login" table if it doesn't exist.
     const createTableQuery = `
-      CREATE TABLE IF NOT EXISTS login (
-        id serial PRIMARY KEY,
-        username VARCHAR(255) NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        type VARCHAR(255) NOT NULL
-      );
+    -- Create the outpass table
+    CREATE TABLE IF NOT EXISTS outpass (
+      id serial PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      registernumber VARCHAR(20) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      year INT NOT NULL,
+      department VARCHAR(255) NOT NULL,
+      semester INT NOT NULL,
+      reason TEXT NOT NULL,
+      current_datetime TIMESTAMP
+    );
     `;
 
     return client.query(createTableQuery);
@@ -118,6 +126,35 @@ app.get('/delete', async(req,res)=>{
   res.send(resu)
 })
 
+app.get('/history',async(req,res)=>{
+  const historyQuery=`select * from outpass`
+  const result=await client.query(historyQuery)
+  res.send(result)
+})
+
+app.post('/outpass', async(req, res) => {
+  const { name, registernumber, email, year, department, semester, reason } = req.body;
+  const currentUtcTime = new Date();
+  const istTime = utcToZonedTime(currentUtcTime, 'Asia/Kolkata');
+  const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });
+  console.log(formattedIstTime)
+  const insertQuery = `
+    INSERT INTO outpass (name, registernumber, email, year, department, semester, reason, current_datetime)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    RETURNING *;
+  `;
+
+  client
+    .query(insertQuery, [name, registernumber, email, year, department, semester, reason,formattedIstTime])
+    .then((result) => {
+      const insertedOutpass = result.rows[0];
+      res.status(201).json(insertedOutpass);
+    })
+    .catch((error) => {
+      console.error('Error inserting outpass:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
