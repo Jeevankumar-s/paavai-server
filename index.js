@@ -23,20 +23,18 @@ client
     console.log('Connected to the database');
     // Create the "login" table if it doesn't exist.
     const createTableQuery = `
-    -- Create the outpass table
     CREATE TABLE IF NOT EXISTS outpass (
       id serial PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       registernumber VARCHAR(20) NOT NULL,
       email VARCHAR(255) NOT NULL,
-      year INT NOT NULL,
+      year VARCHAR(20) NOT NULL,
       department VARCHAR(255) NOT NULL,
-      semester INT NOT NULL,
+      semester VARCHAR(20) NOT NULL,
       reason TEXT NOT NULL,
-      current_datetime TIMESTAMP
+      current_datetime VARCHAR(20)
     );
     `;
-
     return client.query(createTableQuery);
   })
   .then(() => {
