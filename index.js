@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const querys=`select * from login where username='${username}';`;
   const answer= await client.query(querys);
-    const storedHashedPassword = result.rows[0].password;
+    const storedHashedPassword = answer.rows[0].password;
   res.send(storedHashedPassword)
 
   // // First, retrieve the user's data from the database based on the username.
