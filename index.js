@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
        const userType=user[0].type
       // Passwords match, so you can consider it as correct.
       const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-      res.status(201).send({ "jeevToken": jwtToken,"userType":userType});
+      res.status(201).send({ "jeevToken": jwtToken,"userType":userType,validation:true});
     } else {
       // Passwords do not match.
       res.status(401).json({ error: 'Password is incorrect' });
