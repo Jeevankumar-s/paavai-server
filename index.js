@@ -62,6 +62,8 @@ client
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   res.send("hi")
+  res.status(201).send({ "jeevToken": jwtToken,"userType":userType,"validation":true});
+
   res.send(username)
   // console.log(username)
 
