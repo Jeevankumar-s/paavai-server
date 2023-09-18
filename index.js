@@ -150,8 +150,7 @@ app.post('/outpass', async(req, res) => {
   client
     .query(insertQuery, [name, registernumber, email, year, department, semester, reason,formattedIstTime])
     .then((result) => {
-      const insertedOutpass = result.rows[0];
-      res.status(201).json(insertedOutpass);
+      response.status(201).send({submission: true})
     })
     .catch((error) => {
       console.error('Error inserting outpass:', error);
