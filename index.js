@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors()); 
 const PORT = process.env.PORT || 3303;
 const corsOptions = {
-  origin: 'https://paavaioutpass.ccbp.tech',
+  origin: 'https://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
