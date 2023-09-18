@@ -66,8 +66,12 @@ app.post('/login', async (req, res) => {
   // const answer= await client.query(querys);
     const storedHashedPassword = result.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
+          const user=result.rows
+       const userType=user[0].type
+      const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+      res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
 
-  res.send(passwordMatch)
+  // res.send(passwordMatch)
 
   // // First, retrieve the user's data from the database based on the username.
   // const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
