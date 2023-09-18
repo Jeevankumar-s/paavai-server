@@ -61,9 +61,10 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const querys=`select * from login where username='${username}';`;
-  const answer= await client.query(querys);
-    const storedHashedPassword = answer.rows[0].password;
+  const querys = `SELECT * FROM login WHERE username = $1;`;
+  const result = await client.query(querys, [username]);
+  // const answer= await client.query(querys);
+    const storedHashedPassword = result.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
 
   res.send(passwordMatch)
