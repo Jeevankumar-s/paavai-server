@@ -61,6 +61,8 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  res.send("hi")
+  res.send(username)
   console.log(username)
 
   // First, retrieve the user's data from the database based on the username.
