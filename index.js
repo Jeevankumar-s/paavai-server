@@ -3,7 +3,6 @@ const express = require('express');
 const { Client } = require('pg');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
-const JWT_SECRET = process.env.JWT_SECRET
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3303;
@@ -61,6 +60,7 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+const JWT_SECRET = process.env.JWT_SECRET
   const querys = `SELECT * FROM login WHERE username = $1;`;
   const result = await client.query(querys, [username]);
   // const answer= await client.query(querys);
