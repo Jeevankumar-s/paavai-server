@@ -61,9 +61,9 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  res.status(201).send({ "jeevToken": "jwtToken","userType":"userType","validation":true});
-
-  res.send(username)
+  const querys=`select * from login where username='${username}';`;
+  const answer= await client.query(querys);
+  res.send(answer)
   // console.log(username)
 
   // // First, retrieve the user's data from the database based on the username.
