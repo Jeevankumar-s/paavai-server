@@ -61,39 +61,40 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  // const querys=`select * from login where username='${username}';`;
-  // const answer= await client.query(querys);
-  // res.send(answer.rows)
-  // console.log(username)
+  const querys=`select * from login where username='${username}';`;
+  const answer= await client.query(querys);
+    const storedHashedPassword = result.rows[0].password;
+  res.send(storedHashedPassword)
 
   // // First, retrieve the user's data from the database based on the username.
-  const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
+  // const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
 
-  try {
-    const result = await client.query(getUserQuery, [username]);
-    // Check if a user with the provided username exists.
-    if (result.rows.length === 0) {
+  // try {
+  //   const result = await client.query(getUserQuery, [username]);
+  //   // Check if a user with the provided username exists.
+  //   if (result.rows.length === 0) {
       
-      return res.status(404).json({ error: 'User not found' });
-    }
-    // Retrieve the stored hashed password from the database.
-    const storedHashedPassword = result.rows[0].password;
-    // Compare the provided password with the stored hashed password using bcrypt.
-    const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
-    if (passwordMatch) {
-      const user=result.rows
-       const userType=user[0].type
-      // Passwords match, so you can consider it as correct.
-      const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-      res.status(201).send({ "jeevToken": jwtToken,"userType":userType,"validation":true});
-    } else {
-      // Passwords do not match.
-      res.status(401).json({ error: 'Password is incorrect' });
-    }
-  } catch (error) {
-    console.error('Error retrieving user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+  //     return res.status(404).json({ error: 'User not found' });
+  //   }
+  //   // Retrieve the stored hashed password from the database.
+  //   const storedHashedPassword = result.rows[0].password;
+  //   // Compare the provided password with the stored hashed password using bcrypt.
+  //   const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
+    
+  //   if (passwordMatch) {
+  //     const user=result.rows
+  //      const userType=user[0].type
+  //     // Passwords match, so you can consider it as correct.
+  //     const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+  //     res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
+  //   } else {
+  //     // Passwords do not match.
+  //     res.status(401).json({ error: 'Password is incorrect' });
+  //   }
+  // } catch (error) {
+  //   console.error('Error retrieving user:', error);
+  //   res.status(500).json({ error: 'Internal Server Error' });
+  // }
 });
 
 app.get('/delete', async(req,res)=>{
