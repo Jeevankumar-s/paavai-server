@@ -68,8 +68,8 @@ const JWT_SECRET = process.env.JWT_SECRET
     const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
           const user=result.rows
        const userType=user[0].type
-      const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-      res.send("jwt")
+      const jwtToken = await jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+      res.send(jwtToken)
 
       // res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
 
