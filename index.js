@@ -162,4 +162,22 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
+app.get('/history/:registerNo/', async (request, response) => {
+  const {registerNo} = request.params
+  const getOutpass = `
+    SELECT
+      *
+    FROM
+      outpass
+    WHERE
+      registernumber = ${registerNo};`
+  const result = await db.all(getOutpass)
+  response.send(result)
+})
+
+
+
+
+
+
 module.exports = app;
