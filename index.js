@@ -68,9 +68,13 @@ app.post('/login', async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
           const user=result.rows
        const userType=user[0].type
-       res.send(userType)
       const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+      res.send(jwtToken)
+
       // res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
+
+
+      
 
   // res.send(passwordMatch)
 
