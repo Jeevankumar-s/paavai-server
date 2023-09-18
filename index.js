@@ -61,6 +61,7 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  console.log(username)
 
   // First, retrieve the user's data from the database based on the username.
   const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
@@ -81,7 +82,7 @@ app.post('/login', async (req, res) => {
        const userType=user[0].type
       // Passwords match, so you can consider it as correct.
       const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-      res.status(201).send({ "jeevToken": jwtToken,"userType":userType,validation:true});
+      res.status(201).send({ "jeevToken": jwtToken,"userType":userType,"validation":true});
     } else {
       // Passwords do not match.
       res.status(401).json({ error: 'Password is incorrect' });
@@ -92,11 +93,11 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// app.get('/delete', async(req,res)=>{
-//   const delQuery=`select * from login;`;
-//   const resu=await client.query(delQuery)
-//   console.log(resu)
-// })
+app.get('/delete', async(req,res)=>{
+  const delQuery=`select * from login;`;
+  const resu=await client.query(delQuery)
+  res.send(resu)
+})
 
 
 app.listen(PORT, () => {
