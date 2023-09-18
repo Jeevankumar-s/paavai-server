@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const querys=`select * from login where username='${username}';`;
   const answer= await client.query(querys);
-  res.send(answer)
+  res.send(answer.rows)
   // console.log(username)
 
   // // First, retrieve the user's data from the database based on the username.
