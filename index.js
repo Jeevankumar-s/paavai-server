@@ -69,7 +69,7 @@ const JWT_SECRET = process.env.JWT_SECRET
           const user=result.rows
        const userType=user[0].type
       const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-      res.json({jwtToken})
+      res.send("jwt")
 
       // res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
 
