@@ -60,7 +60,7 @@ client
 // })
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-const JWT_SECRET = process.env.JWT_SECRET
+
   const querys = `SELECT * FROM login WHERE username = $1;`;
   const result = await client.query(querys, [username]);
   // const answer= await client.query(querys);
@@ -69,7 +69,7 @@ const JWT_SECRET = process.env.JWT_SECRET
           const user=result.rows
        const userType=user[0].type
       //  res.send(userType)
-      const jwtToken = await jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+      const jwtToken = await jwt.sign({ username }, "JEEVANKUMARKIRUTHIKA", { expiresIn: '1h' });
       res.send(jwtToken)
 
       // res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
