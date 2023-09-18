@@ -61,16 +61,16 @@ client
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  const querys = `SELECT * FROM login WHERE username = $1;`;
-  const result = await client.query(querys, [username]);
-  // const answer= await client.query(querys);
-    const storedHashedPassword = result.rows[0].password;
-    const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
-          const user=result.rows
-       const userType=user[0].type
-      //  res.send(userType)
-      const jwtToken = await jwt.sign({ username }, "JEEVANKUMARKIRUTHIKA", { expiresIn: '1h' });
-      res.send(jwtToken)
+  // const querys = `SELECT * FROM login WHERE username = $1;`;
+  // const result = await client.query(querys, [username]);
+  // // const answer= await client.query(querys);
+  //   const storedHashedPassword = result.rows[0].password;
+  //   const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
+  //         const user=result.rows
+  //      const userType=user[0].type
+  //     //  res.send(userType)
+  //     const jwtToken = await jwt.sign({ username }, "JEEVANKUMARKIRUTHIKA", { expiresIn: '1h' });
+  //     res.send(jwtToken)
 
       // res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
 
@@ -80,34 +80,34 @@ app.post('/login', async (req, res) => {
   // res.send(passwordMatch)
 
   // // First, retrieve the user's data from the database based on the username.
-  // const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
+  const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
 
-  // try {
-  //   const result = await client.query(getUserQuery, [username]);
-  //   // Check if a user with the provided username exists.
-  //   if (result.rows.length === 0) {
+  try {
+    const result = await client.query(getUserQuery, [username]);
+    // Check if a user with the provided username exists.
+    if (result.rows.length === 0) {
       
-  //     return res.status(404).json({ error: 'User not found' });
-  //   }
-  //   // Retrieve the stored hashed password from the database.
-  //   const storedHashedPassword = result.rows[0].password;
-  //   // Compare the provided password with the stored hashed password using bcrypt.
-  //   const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Retrieve the stored hashed password from the database.
+    const storedHashedPassword = result.rows[0].password;
+    // Compare the provided password with the stored hashed password using bcrypt.
+    const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
     
-  //   if (passwordMatch) {
-  //     const user=result.rows
-  //      const userType=user[0].type
-  //     // Passwords match, so you can consider it as correct.
-  //     const jwtToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-  //     res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
-  //   } else {
-  //     // Passwords do not match.
-  //     res.status(401).json({ error: 'Password is incorrect' });
-  //   }
-  // } catch (error) {
-  //   console.error('Error retrieving user:', error);
-  //   res.status(500).json({ error: 'Internal Server Error' });
-  // }
+    if (passwordMatch) {
+      const user=result.rows
+       const userType=user[0].type
+      // Passwords match, so you can consider it as correct.
+      const jwtToken = jwt.sign({ username }, "JEEVANKUMARKIRUTHIKA", { expiresIn: '1h' });
+      res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
+    } else {
+      // Passwords do not match.
+      res.status(401).json({ error: 'Password is incorrect' });
+    }
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 app.get('/delete', async(req,res)=>{
