@@ -10,7 +10,12 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 const PORT = process.env.PORT || 3303;
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
 
+app.use(cors(corsOptions));
 const connectionString = process.env.URL; // Replace with your actual ElephantSQL database URL.
 const client = new Client({
   connectionString: connectionString,
