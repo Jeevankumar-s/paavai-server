@@ -40,10 +40,7 @@ client
       current_datetime VARCHAR(20)
     );
     `;
-    const qury=`ALTER TABLE outpass
-    ADD COLUMN status VARCHAR(20);
-    `
-    return client.query(qury);
+    return client.query(createTableQuery);
   })
   .then(() => {
     console.log('Table "login" created or already exists');
@@ -52,50 +49,9 @@ client
     console.error('Error:', error);
   });
 
-// app.post('/login', async(req, res) => {
-//   const {username,password,type}=req.body;
-//   const insertQuery = `INSERT INTO login (username, password, type) VALUES ($1, $2, $3) RETURNING *`;
-//   const hashedPassword=await bcrypt.hash(password,5)
-//   client
-//     .query(insertQuery, [username, hashedPassword, type])
-//     .then((result) => {
-//       const insertedUser = result.rows[0];
-//       res.status(201).json(insertedUser);
-//       console.log('success')
-//     })
-//     .catch((error) => {
-//       console.error('Error inserting user:', error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//     });
-// });
-
-// app.get('/users',async(req,res)=>{
-//   const getUser=`select * from login where username="20104035";`;
-//   const result=await client.query(getUser)
-//   res.send(result);
-// })
+   
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
-  // const querys = `SELECT * FROM login WHERE username = $1;`;
-  // const result = await client.query(querys, [username]);
-  // // const answer= await client.query(querys);
-  //   const storedHashedPassword = result.rows[0].password;
-  //   const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
-  //         const user=result.rows
-  //      const userType=user[0].type
-  //     //  res.send(userType)
-  //     const jwtToken = await jwt.sign({ username }, "JEEVANKUMARKIRUTHIKA", { expiresIn: '1h' });
-  //     res.send(jwtToken)
-
-      // res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
-
-
-      
-
-  // res.send(passwordMatch)
-
-  // // First, retrieve the user's data from the database based on the username.
   const getUserQuery = `SELECT * FROM login WHERE username = $1;`;
 
   try {
