@@ -12,4 +12,4 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3305/history/20104060 
+GET http://localhost:3305/historyNo/5

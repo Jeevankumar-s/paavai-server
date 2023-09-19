@@ -175,6 +175,47 @@ app.get('/history/:registerNo/', async (request, response) => {
   response.send(result.rows)
 })
 
+app.get('/historyNo/:id', async (req, res) =>{
+  const {id}=req.params
+  console.log(id)
+  const rquery=`select * from outpass where id=${id};`;
+  const results= await client.query(rquery)
+  res.send(results.rows)
+})
+
+app.post('/outpass/:id/accept', async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  try {
+    const updateQuery = `
+      UPDATE outpass
+      SET status = 'accepted'
+      WHERE id = $1;
+    `;
+    await client.query(updateQuery, [id]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error accepting outpass:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while accepting outpass' });
+  }
+});
+
+app.post('/outpass/:id/decline', async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  try {
+    const updateQuery = `
+      UPDATE outpass
+      SET status = 'declined'
+      WHERE id = $1;
+    `;
+    await client.query(updateQuery, [id]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error declining outpass:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while declining outpass' });
+  }
+});
 
 
 
