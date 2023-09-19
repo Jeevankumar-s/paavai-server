@@ -40,7 +40,10 @@ client
       current_datetime VARCHAR(20)
     );
     `;
-    return client.query(createTableQuery);
+    const qury=`ALTER TABLE outpass
+    ADD COLUMN status VARCHAR(20);
+    `
+    return client.query(qury);
   })
   .then(() => {
     console.log('Table "login" created or already exists');
@@ -135,28 +138,37 @@ app.get('/history',async(req,res)=>{
   res.send(result.rows)
 })
 
-app.post('/outpass', async(req, res) => {
+app.post('/outpass', async (req, res) => {
   const { name, registernumber, email, year, department, semester, reason } = req.body;
   const currentUtcTime = new Date();
   const istTime = utcToZonedTime(currentUtcTime, 'Asia/Kolkata');
   const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });
-  console.log(formattedIstTime)
+
   const insertQuery = `
-    INSERT INTO outpass (name, registernumber, email, year, department, semester, reason, current_datetime)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO outpass (name, registernumber, email, year, department, semester, reason, current_datetime, status)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'pending')
     RETURNING *;
   `;
 
-  client
-    .query(insertQuery, [name, registernumber, email, year, department, semester, reason,formattedIstTime])
-    .then((result) => {
-      res.status(201).send({submission: true})
-    })
-    .catch((error) => {
-      console.error('Error inserting outpass:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
+  try {
+    const result = await client.query(insertQuery, [
+      name,
+      registernumber,
+      email,
+      year,
+      department,
+      semester,
+      reason,
+      formattedIstTime,
+    ]);
+
+    res.status(201).json({ submission: true, outpass: result.rows[0] });
+  } catch (error) {
+    console.error('Error inserting outpass:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -175,7 +187,7 @@ app.get('/history/:registerNo/', async (request, response) => {
   response.send(result.rows)
 })
 
-app.get('/historyNo/:id', async (req, res) =>{
+app.get('/outpass/:id', async (req, res) =>{
   const {id}=req.params
   console.log(id)
   const rquery=`select * from outpass where id=${id};`;
