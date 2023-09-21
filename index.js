@@ -21,7 +21,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-const connectionString = process.env.URL; // Replace with your actual ElephantSQL database URL.
+const connectionString = process.env.URL; 
 const client = new Client({
   connectionString: connectionString,
   ssl: { rejectUnauthorized: false },
@@ -58,6 +58,20 @@ client
   .catch((error) => {
     console.error('Error:', error);
   });
+
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: process.env.GMAIL,
+      pass: process.env.GMAIL_PASS,
+    },
+  });
+
+  const generateDigitalSignature = (studentName) => {
+    const secretKey = 'JEEVANKUMAR';
+    const signature = crypto.createHmac('sha256', secretKey).update(studentName).digest('hex');
+    return signature;
+  };
 
    
 app.post('/login', async (req, res) => {
