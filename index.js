@@ -288,7 +288,7 @@ app.post('/outpass/:id/accept', async (req, res) => {
 
     await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
 
-    res.json({ success: true });
+    res.json({ success: true ,email:outpass.email});
   } catch (error) {
     console.error('Error accepting outpass:', error);
     res.status(500).json({ success: false, message: 'An error occurred while accepting outpass' });
