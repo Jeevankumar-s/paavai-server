@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors()); 
 const PORT = process.env.PORT || 3303;
 const corsOptions = {
-  origin: 'https://paavaioutpass.ccbp.tech',
+  origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
@@ -278,17 +278,26 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
  
 
 app.post('/outpass/:id/accept', async (req, res) => {
-  const id = (req.params.id);
+  const id = req.params.id;
 
   try {
+    console.log(`Accepting outpass with ID: ${id}...`);
+
     const updateQuery = `
       UPDATE outpass
       SET status = 'accepted'
       WHERE id = $1
-      RETURNING *;;
+      RETURNING *;
     `;
-    await client.query(updateQuery, [id]);
-    
+    const updatedOutpass = await client.query(updateQuery, [id]);
+
+    if (updatedOutpass.rows.length === 0) {
+      console.error(`Outpass with ID ${id} not found.`);
+      return res.status(404).json({ success: false, message: 'Outpass not found' });
+    }
+
+    console.log(`Outpass with ID ${id} accepted successfully.`);
+
     // Fetch the outpass details from the database
     const outpassQuery = `
       SELECT * FROM outpass WHERE id = $1;
@@ -297,17 +306,23 @@ app.post('/outpass/:id/accept', async (req, res) => {
     const outpass = rows[0];
 
     if (!outpass) {
-      return res.status(404).json({ success: false, message: 'Outpass not found' });
+      console.error(`Outpass with ID ${id} not found in the database.`);
+      return res.status(404).json({ success: false, message: 'Outpass not found in the database' });
     }
+
+    console.log(`Sending acceptance email to ${outpass.email}...`);
 
     await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
 
-    res.json({ success: true ,email:outpass.email});
+    console.log(`Acceptance email sent to ${outpass.email} successfully.`);
+
+    res.json({ success: true, email: outpass.email });
   } catch (error) {
     console.error('Error accepting outpass:', error);
     res.status(500).json({ success: false, message: 'An error occurred while accepting outpass' });
   }
 });
+
 
 
 
