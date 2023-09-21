@@ -183,12 +183,16 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
   const doc = new PDFDocument();
 
   try {
+    console.log('Starting email sending process...');
+
     const collegeLogoPath = './images/paavailogo.jpeg'; 
     const collegeImagePath = './images/building.jpeg'; 
 
+    console.log('Reading college logo image...');
     const logoImage = fs.readFileSync(collegeLogoPath);
     doc.image(logoImage, 50, 50, { width: 100 }); 
 
+    console.log('Reading college image...');
     const collegeImage = fs.readFileSync(collegeImagePath);
     doc.image(collegeImage, { align: 'center', valign: 'center' });
 
@@ -227,6 +231,8 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
     // End the PDF document
     doc.end();
 
+    console.log('PDF conversion successful.');
+
     // Convert the PDF to a buffer
     const pdfBuffer = await new Promise((resolve, reject) => {
       const buffers = [];
@@ -234,6 +240,9 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
       doc.on('end', () => resolve(Buffer.concat(buffers)));
       doc.on('error', reject);
     });
+
+    // Log that the email options are set
+    console.log('Setting email options...');
 
     // Send the email
     const mailOptions = {
@@ -250,11 +259,16 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
       ],
     };
 
+    console.log('Email options:', mailOptions);
+
     const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
 
     await sendMailAsync(mailOptions);
+
+    // Log that the email was sent successfully
     console.log('Email sent successfully.');
   } catch (error) {
+    // Log any errors that occur during the email sending process
     console.error('Error sending email:', error);
   }
 };
