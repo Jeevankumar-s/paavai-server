@@ -190,9 +190,12 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.font('./fonts/ARIBL0.ttf');
 
     const collegeLogoPath = './images/paavailogo.jpeg'; 
+    const backgroundImagePath = './images/output-onlinepngtools.png';
+    const backgroundImage = fs.readFileSync(backgroundImagePath);
 
     const logoImage = fs.readFileSync(collegeLogoPath);
     doc.image(logoImage, 50, 50, { width: 70, y:70 }); 
+    doc.image(backgroundImage, 40, 140, { width: 612-80, height: 792-180 ,opacity: 0.1});
     
     doc.moveUp(2)
     doc.fontSize(20).text('PAAVAI ENGINNERING COLLEGE', { align: 'center',bold: true, y: -30});
@@ -203,15 +206,15 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     const lineEndX = doc.page.width - 30; // Adjust the X-coordinate for the line's end point
     doc.moveTo(lineStartX, lineStartY).lineTo(lineEndX, lineStartY).stroke();
     
-    doc.moveDown(4);
-
+    doc.moveDown(5);
+    
     doc.fontSize(16).text('OUTPASS DETAILS', { align: 'center', bold: true, color: 'blue' });
     
     const textWidth = doc.widthOfString('OUTPASS DETAILS');
     const textX = (doc.page.width - textWidth) / 2;
     const underlineY = doc.y + 6; // Adjust the Y-coordinate for the underline
     doc.moveTo(textX, underlineY).lineTo(textX + textWidth, underlineY).stroke();
-
+    
 
     doc.moveDown(2);
 
@@ -250,8 +253,8 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
 
   doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'center' });
 
-       const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
-    doc.pipe(fs.createWriteStream(pdfPath)); 
+      //  const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    // doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
 
@@ -278,9 +281,9 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     };
 
 
-    // const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
 
-    // await sendMailAsync(mailOptions);
+    await sendMailAsync(mailOptions);
 
     console.log('Email sent successfully.');
   } catch (error) {
