@@ -183,16 +183,13 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
   const doc = new PDFDocument();
 
   try {
-    console.log('Starting email sending process...');
 
     const collegeLogoPath = './images/paavailogo.jpeg'; 
     const collegeImagePath = './images/building.jpeg'; 
 
-    console.log('Reading college logo image...');
     const logoImage = fs.readFileSync(collegeLogoPath);
     doc.image(logoImage, 50, 50, { width: 100 }); 
 
-    console.log('Reading college image...');
     const collegeImage = fs.readFileSync(collegeImagePath);
     doc.image(collegeImage, { align: 'center', valign: 'center' });
 
@@ -228,12 +225,9 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
     const signature = generateDigitalSignature(studentName);
     doc.fontSize(12).text(`Digital Signature: ${signature}`, { align: 'center' });
 
-    // End the PDF document
     doc.end();
 
-    console.log('PDF conversion successful.');
 
-    // Convert the PDF to a buffer
     const pdfBuffer = await new Promise((resolve, reject) => {
       const buffers = [];
       doc.on('data', (chunk) => buffers.push(chunk));
@@ -241,10 +235,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
       doc.on('error', reject);
     });
 
-    // Log that the email options are set
-    console.log('Setting email options...');
 
-    // Send the email
     const mailOptions = {
       from: 'pavaioutpass@gmail.com',
       to: studentEmail,
@@ -253,22 +244,19 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
       attachments: [
         {
           filename: 'outpass_acceptance.pdf',
-          content: pdfBuffer, // Attach the PDF buffer
+          content: pdfBuffer, 
           contentType: 'application/pdf',
         },
       ],
     };
 
-    console.log('Email options:', mailOptions);
 
     const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
 
     await sendMailAsync(mailOptions);
 
-    // Log that the email was sent successfully
     console.log('Email sent successfully.');
   } catch (error) {
-    // Log any errors that occur during the email sending process
     console.error('Error sending email:', error);
   }
 };
@@ -296,7 +284,6 @@ app.post('/outpass/:id/accept', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Outpass not found' });
     }
 
-    console.log(`Outpass with ID ${id} accepted successfully.`);
 
     // Fetch the outpass details from the database
     const outpassQuery = `
@@ -310,11 +297,9 @@ app.post('/outpass/:id/accept', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Outpass not found in the database' });
     }
 
-    console.log(`Sending acceptance email to ${outpass.email}...`);
 
     await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
 
-    console.log(`Acceptance email sent to ${outpass.email} successfully.`);
 
     res.json({ success: true, email: outpass.email });
   } catch (error) {
