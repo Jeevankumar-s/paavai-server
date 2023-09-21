@@ -181,52 +181,77 @@ app.get('/outpass/:id', async (req, res) =>{
   res.send(results.rows)
 })
 
-const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) => {
+const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, department, year) => {
   const doc = new PDFDocument();
 
   try {
 
+    doc.font('./fonts/arial.ttf');
+    doc.font('./fonts/ARIBL0.ttf');
+
     const collegeLogoPath = './images/paavailogo.jpeg'; 
-    const collegeImagePath = './images/building.jpeg'; 
 
     const logoImage = fs.readFileSync(collegeLogoPath);
-    doc.image(logoImage, 50, 50, { width: 100 }); 
+    doc.image(logoImage, 50, 50, { width: 70, y:70 }); 
+    
+    doc.moveUp(2)
+    doc.fontSize(20).text('PAAVAI ENGINNERING COLLEGE', { align: 'center',bold: true, y: -30});
+    doc.fontSize(17).text('(AUTONOMOUS)', { align: 'center' });
+    doc.fontSize(14).text('NH-44, Pachal, Namakkal,Tamilnadu-627018 ', { align: 'center' });
+    const lineStartX = 30; // Adjust the X-coordinate as needed
+    const lineStartY = doc.y + 30; // Adjust the Y-coordinate to position the line below the text
+    const lineEndX = doc.page.width - 30; // Adjust the X-coordinate for the line's end point
+    doc.moveTo(lineStartX, lineStartY).lineTo(lineEndX, lineStartY).stroke();
+    
+    doc.moveDown(4);
 
-    const collegeImage = fs.readFileSync(collegeImagePath);
-    doc.image(collegeImage, { align: 'center', valign: 'center' });
+    doc.fontSize(16).text('OUTPASS DETAILS', { align: 'center', bold: true, color: 'blue' });
+    
+    const textWidth = doc.widthOfString('OUTPASS DETAILS');
+    const textX = (doc.page.width - textWidth) / 2;
+    const underlineY = doc.y + 6; // Adjust the Y-coordinate for the underline
+    doc.moveTo(textX, underlineY).lineTo(textX + textWidth, underlineY).stroke();
 
-    doc.fontSize(16).text('Paavai Engineering College', { align: 'center' });
-    doc.fontSize(14).text('Pachal, Namakkal', { align: 'center' });
+
+    doc.moveDown(2);
+
 
     const studentNameWidth = doc.widthOfString(`Student Name: ${studentName}`);
     const studentNameX = (doc.page.width - studentNameWidth) / 2;
 
-    doc.fontSize(14).text('Outpass Acceptance', { align: 'center' });
-    doc.fontSize(12).text(`Student Name: ${studentName}`, studentNameX);
-    doc.fontSize(12).text(`Register No: ${registerNo}`);
     
     const now = new Date();
     const acceptanceDateTime = now.toLocaleString();
+    
+    
+    doc.fontSize(20).text(`Student Name : ${studentName}`, studentNameX);
+    doc.fontSize(20).text(`Register No : ${registerNo}`);
+    doc.fontSize(20).text(`Department : ${department}`);
+    doc.fontSize(20).text(`Year : ${year}`);
+    doc.fontSize(20).text(`Date and Time of Acceptance: ${acceptanceDateTime}`);
+    
 
-    doc.fontSize(12).text(`Date and Time of Acceptance: ${acceptanceDateTime}`, { align: 'center' });
 
-    const watermarkText = 'JEEV PASS';
+    const watermarkText = 'PAAVAI OUTPASS';
 
     const watermarkWidth = doc.widthOfString(watermarkText);
     const watermarkHeight = doc.currentLineHeight();
-    const watermarkX = (doc.page.width - watermarkWidth) / 3;
-    const watermarkY = (doc.page.height - watermarkHeight) / 2;
+    const watermarkX = (doc.page.width - watermarkWidth) / 3.9;
+    const watermarkY = (doc.page.height - watermarkHeight) / 1.5;
 
     const watermarkRotation = -45; // Negative angle for left tilt
 
     doc.rotate(watermarkRotation, { origin: [watermarkX, watermarkY] })
-       .fontSize(48)
+       .fontSize(45)
        .fillOpacity(0.3)
        .text(watermarkText, watermarkX, watermarkY, { align: 'center' });
 
     const signature = generateDigitalSignature(studentName);
-    doc.fontSize(12).text(`Digital Signature: ${signature}`, { align: 'center' });
 
+  doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'right' });
+
+      //  const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    // doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
 
@@ -300,7 +325,7 @@ app.post('/outpass/:id/accept', async (req, res) => {
     }
 
 
-    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
+    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year);
 
 
     res.json({ success: true, email: outpass.email});
