@@ -12,4 +12,4 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3305/historyNo/5
+POST http://localhost:3305/outpass/37eb88db-a265-47d6-a81a-72bdf6d1e5c8/accept

@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors()); 
 const PORT = process.env.PORT || 3303;
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://paavaioutpass.ccbp.tech',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
@@ -305,7 +305,7 @@ const sendAcceptanceEmail = (studentEmail, id, studentName, registerNo) => {
 // });
 
 app.post('/outpass/:id/accept', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = (req.params.id);
 
   try {
     const updateQuery = `
