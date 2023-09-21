@@ -4,6 +4,7 @@ const { Client } = require('pg');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 const cors = require('cors'); 
+const { v4: jk } = require('uuid');
 const { format } = require('date-fns');
 const { utcToZonedTime } = require('date-fns-tz');
 const app = express();
@@ -11,7 +12,7 @@ app.use(express.json());
 app.use(cors()); 
 const PORT = process.env.PORT || 3303;
 const corsOptions = {
-  origin: 'https://paavaioutpass.ccbp.tech',
+  origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
@@ -29,7 +30,7 @@ client
     // Create the "login" table if it doesn't exist.
     const createTableQuery = `
     CREATE TABLE IF NOT EXISTS outpass (
-      id serial PRIMARY KEY,
+      id TEXT PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       registernumber VARCHAR(20) NOT NULL,
       email VARCHAR(255) NOT NULL,
@@ -37,9 +38,14 @@ client
       department VARCHAR(255) NOT NULL,
       semester VARCHAR(20) NOT NULL,
       reason TEXT NOT NULL,
-      current_datetime VARCHAR(20)
+      current_datetime  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
+      status VARCHAR(20) NOT NULL
     );
     `;
+      
+   
+
+  
     return client.query(createTableQuery);
   })
   .then(() => {
@@ -99,15 +105,17 @@ app.post('/outpass', async (req, res) => {
   const currentUtcTime = new Date();
   const istTime = utcToZonedTime(currentUtcTime, 'Asia/Kolkata');
   const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });
-
+  
+  const outpassId = jk() 
   const insertQuery = `
-    INSERT INTO outpass (name, registernumber, email, year, department, semester, reason, current_datetime, status)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'pending')
+    INSERT INTO outpass (id, name, registernumber, email, year, department, semester, reason, current_datetime, status)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending')
     RETURNING *;
   `;
 
   try {
     const result = await client.query(insertQuery, [
+      outpassId,
       name,
       registernumber,
       email,
@@ -119,6 +127,7 @@ app.post('/outpass', async (req, res) => {
     ]);
 
     res.status(201).json({ submission: true, outpass: result.rows[0] });
+    console.log(result)
   } catch (error) {
     console.error('Error inserting outpass:', error);
     res.status(500).json({ error: 'Internal Server Error' });

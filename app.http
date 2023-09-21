@@ -5,9 +5,9 @@ Content-Type: application/json
     "name":"jeevan", 
     "registernumber":"20104035", 
     "email":"jeevenkumar2003@gmail.com", 
-    "year":4, 
+    "year":"IV", 
     "department":"CSE", 
-    "semester":"7", 
+    "semester":"VII", 
     "reason":"veetuku poganum"
 }
 
