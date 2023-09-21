@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const { Client } = require('pg');
 const bcrypt=require('bcrypt')
+const util = require('util');
 const jwt=require('jsonwebtoken')
 const cors = require('cors'); 
 const nodemailer = require('nodemailer');
@@ -178,8 +179,7 @@ app.get('/outpass/:id', async (req, res) =>{
   res.send(results.rows)
 })
 
-
-const sendAcceptanceEmail = (studentEmail, id, studentName, registerNo) => {
+const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) => {
   const doc = new PDFDocument();
 
   try {
@@ -191,51 +191,51 @@ const sendAcceptanceEmail = (studentEmail, id, studentName, registerNo) => {
 
     const collegeImage = fs.readFileSync(collegeImagePath);
     doc.image(collegeImage, { align: 'center', valign: 'center' });
-  } catch (error) {
-    console.error('Error reading images:', error);
-    return;
-  }
 
-  doc.fontSize(16).text('Paavai Engineering College', { align: 'center' });
-  doc.fontSize(14).text('Pachal, Namakkal', { align: 'center' });
+    doc.fontSize(16).text('Paavai Engineering College', { align: 'center' });
+    doc.fontSize(14).text('Pachal, Namakkal', { align: 'center' });
 
-  const studentNameWidth = doc.widthOfString(`Student Name: ${studentName}`);
-  const studentNameX = (doc.page.width - studentNameWidth) / 2;
+    const studentNameWidth = doc.widthOfString(`Student Name: ${studentName}`);
+    const studentNameX = (doc.page.width - studentNameWidth) / 2;
 
-  doc.fontSize(14).text('Outpass Acceptance', { align: 'center' });
-  doc.fontSize(12).text(`Student Name: ${studentName}`, studentNameX);
-  doc.fontSize(12).text(`Register No: ${registerNo}`);
-  
-  const now = new Date();
-  const acceptanceDateTime = now.toLocaleString();
+    doc.fontSize(14).text('Outpass Acceptance', { align: 'center' });
+    doc.fontSize(12).text(`Student Name: ${studentName}`, studentNameX);
+    doc.fontSize(12).text(`Register No: ${registerNo}`);
+    
+    const now = new Date();
+    const acceptanceDateTime = now.toLocaleString();
 
-  doc.fontSize(12).text(`Date and Time of Acceptance: ${acceptanceDateTime}`, { align: 'center' });
+    doc.fontSize(12).text(`Date and Time of Acceptance: ${acceptanceDateTime}`, { align: 'center' });
 
-  const watermarkText = 'JEEV PASS';
+    const watermarkText = 'JEEV PASS';
 
-  const watermarkWidth = doc.widthOfString(watermarkText);
-  const watermarkHeight = doc.currentLineHeight();
-  const watermarkX = (doc.page.width - watermarkWidth) / 3;
-  const watermarkY = (doc.page.height - watermarkHeight) / 2;
+    const watermarkWidth = doc.widthOfString(watermarkText);
+    const watermarkHeight = doc.currentLineHeight();
+    const watermarkX = (doc.page.width - watermarkWidth) / 3;
+    const watermarkY = (doc.page.height - watermarkHeight) / 2;
 
-  const watermarkRotation = -45; // Negative angle for left tilt
+    const watermarkRotation = -45; // Negative angle for left tilt
 
-  doc.rotate(watermarkRotation, { origin: [watermarkX, watermarkY] })
-     .fontSize(48)
-     .fillOpacity(0.3)
-     .text(watermarkText, watermarkX, watermarkY, { align: 'center' });
+    doc.rotate(watermarkRotation, { origin: [watermarkX, watermarkY] })
+       .fontSize(48)
+       .fillOpacity(0.3)
+       .text(watermarkText, watermarkX, watermarkY, { align: 'center' });
 
-  const signature = generateDigitalSignature(studentName);
-  doc.fontSize(12).text(`Digital Signature: ${signature}`, { align: 'center' });
+    const signature = generateDigitalSignature(studentName);
+    doc.fontSize(12).text(`Digital Signature: ${signature}`, { align: 'center' });
 
-  const pdfBuffer = [];
-  doc.on('data', (chunk) => {
-    pdfBuffer.push(chunk);
-  });
+    // End the PDF document
+    doc.end();
 
-  doc.on('end', () => {
-    const pdfData = Buffer.concat(pdfBuffer);
+    // Convert the PDF to a buffer
+    const pdfBuffer = await new Promise((resolve, reject) => {
+      const buffers = [];
+      doc.on('data', (chunk) => buffers.push(chunk));
+      doc.on('end', () => resolve(Buffer.concat(buffers)));
+      doc.on('error', reject);
+    });
 
+    // Send the email
     const mailOptions = {
       from: 'pavaioutpass@gmail.com',
       to: studentEmail,
@@ -244,23 +244,19 @@ const sendAcceptanceEmail = (studentEmail, id, studentName, registerNo) => {
       attachments: [
         {
           filename: 'outpass_acceptance.pdf',
-          content: pdfData,
+          content: pdfBuffer, // Attach the PDF buffer
           contentType: 'application/pdf',
         },
       ],
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-      } else {
-        console.log('Email sent:', info.response);
-      }
-    });
-  });
+    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
 
-  // End the PDF document
-  doc.end();
+    await sendMailAsync(mailOptions);
+    console.log('Email sent successfully.');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
 };
 
 
