@@ -261,31 +261,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo) =>
 
 
 
-
-
-// app.post('/outpass/:id/accept', async (req, res) => {
-//   const id = parseInt(req.params.id);
-
-//   try {
-//     const updateQuery = `
-//       UPDATE outpass
-//       SET status = 'accepted'
-//       WHERE id = $1;
-//     `;
-//     await client.query(updateQuery, [id]);
-//     const outpassQuery = `
-//     SELECT * FROM outpass WHERE id = $1;
-//   `;
-//   const { rows } = await client.query(outpassQuery, [id]);
-//   const outpass = rows[0];
-
-//     res.json({ success: true });
-//     sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
-//   } catch (error) {
-//     console.error('Error accepting outpass:', error);
-//     res.status(500).json({ success: false, message: 'An error occurred while accepting outpass' });
-//   }
-// });
+ 
 
 app.post('/outpass/:id/accept', async (req, res) => {
   const id = (req.params.id);
@@ -294,7 +270,8 @@ app.post('/outpass/:id/accept', async (req, res) => {
     const updateQuery = `
       UPDATE outpass
       SET status = 'accepted'
-      WHERE id = $1;
+      WHERE id = $1
+      RETURNING *;;
     `;
     await client.query(updateQuery, [id]);
     
@@ -309,7 +286,7 @@ app.post('/outpass/:id/accept', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Outpass not found' });
     }
 
-    sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
+    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber);
 
     res.json({ success: true });
   } catch (error) {
