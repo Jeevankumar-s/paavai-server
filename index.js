@@ -243,15 +243,15 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
 
     doc.rotate(watermarkRotation, { origin: [watermarkX, watermarkY] })
        .fontSize(45)
-       .fillOpacity(0.3)
-       .text(watermarkText, watermarkX, watermarkY, { align: 'center' });
+       .fillOpacity(0.2)
+       .text(watermarkText, watermarkX, watermarkY, { align: 'center'});
 
     const signature = generateDigitalSignature(studentName);
 
-  doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'right' });
+  doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'center' });
 
-      //  const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
-    // doc.pipe(fs.createWriteStream(pdfPath)); 
+       const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
 
@@ -278,9 +278,9 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     };
 
 
-    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+    // const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
 
-    await sendMailAsync(mailOptions);
+    // await sendMailAsync(mailOptions);
 
     console.log('Email sent successfully.');
   } catch (error) {
