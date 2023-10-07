@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const { format } = require('date-fns');
+const { utcToZonedTime } = require('date-fns-tz');
 const { Client } = require('pg');
 const bcrypt=require('bcrypt')
 const util = require('util');
@@ -10,8 +12,6 @@ const PDFDocument = require('pdfkit');
 const crypto = require('crypto');
 const fs = require('fs');
 const { v4: jk } = require('uuid');
-const { format } = require('date-fns');
-const { utcToZonedTime } = require('date-fns-tz');
 const app = express();
 app.use(express.json());
 app.use(cors()); 
@@ -222,17 +222,17 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     const studentNameWidth = doc.widthOfString(`Student Name: ${studentName}`);
     const studentNameX = (doc.page.width - studentNameWidth) / 2;
 
-    
-    const now = new Date();
-    const acceptanceDateTime = now.toLocaleString();
-    console.log(acceptanceDateTime)
+    const istTime = new Date();
+    const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });    
+    // const acceptanceDateTime = now.toLocaleString();
+    console.log(formattedIstTime)
     
     
     doc.fontSize(20).text(`Student Name : ${studentName}`, studentNameX);
     doc.fontSize(20).text(`Register No : ${registerNo}`);
     doc.fontSize(20).text(`Department : ${department}`);
     doc.fontSize(20).text(`Year : ${year}`);
-    doc.fontSize(20).text(`Date and Time of Acceptance: ${acceptanceDateTime}`);
+    doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
 
 
