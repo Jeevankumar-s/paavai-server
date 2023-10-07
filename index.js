@@ -181,7 +181,7 @@ app.get('/outpass/:id', async (req, res) =>{
   res.send(results.rows)
 })
 
-const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, department, year) => {
+const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, department, year,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -225,13 +225,14 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     const istTime = new Date();
     const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });    
     // const acceptanceDateTime = now.toLocaleString();
-    console.log(formattedIstTime)
+    // console.log(formattedIstTime)
     
     
     doc.fontSize(20).text(`Student Name : ${studentName}`, studentNameX);
     doc.fontSize(20).text(`Register No : ${registerNo}`);
     doc.fontSize(20).text(`Department : ${department}`);
     doc.fontSize(20).text(`Year : ${year}`);
+    doc.fontSize(20).text(`Reason: ${reason}`);
     doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
 
@@ -329,7 +330,7 @@ app.post('/outpass/:id/accept', async (req, res) => {
     }
 
 
-    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year);
+    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year,outpass.reason);
 
 
     res.json({ success: true, email: outpass.email});
@@ -339,6 +340,23 @@ app.post('/outpass/:id/accept', async (req, res) => {
   }
 });
 
+// Staff Approval
+app.post('/outpass/:id/staff-approve', async (req, res) => {
+  const id = req.params.id;
+  try {
+    // Update staff approval status in the database
+    const updateQuery = `
+      UPDATE outpass
+      SET status = 'Staff Approved'
+      WHERE id = $1;
+    `;
+    await client.query(updateQuery, [id]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error approving outpass:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while approving outpass' });
+  }
+});
 
 
 
