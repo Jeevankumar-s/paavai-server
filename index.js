@@ -76,6 +76,28 @@ client
     return signature;
   };
 
+  app.post('/register', async (req, res) => {
+    try {
+      const { username, password, user } = req.body;
+  
+      // Hash the user's password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Insert the user into the database
+      const insertUserQuery = `
+        INSERT INTO login (username, password, type)
+        VALUES ($1, $2, $3)
+        RETURNING id, username, type;
+      `;
+  
+      const result = await client.query(insertUserQuery, [username, hashedPassword, user]);
+  
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
    
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -109,11 +131,11 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.get('/delete', async(req,res)=>{
-  const delQuery=`select * from login;`;
-  const resu=await client.query(delQuery)
-  res.send(resu)
-})
+// app.get('/delete', async(req,res)=>{
+//   const delQuery=`select * from login;`;
+//   const resu=await client.query(delQuery)
+//   res.send(resu)
+// })
 
 app.get('/history',async(req,res)=>{
   const historyQuery=`select * from outpass`
