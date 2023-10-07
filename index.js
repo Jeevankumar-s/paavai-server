@@ -225,6 +225,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     
     const now = new Date();
     const acceptanceDateTime = now.toLocaleString();
+    console.log(acceptanceDateTime)
     
     
     doc.fontSize(20).text(`Student Name : ${studentName}`, studentNameX);
@@ -253,7 +254,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
 
   doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'center' });
 
-      //  const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    //    const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
     // doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
