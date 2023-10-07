@@ -380,6 +380,24 @@ app.post('/outpass/:id/staff-approve', async (req, res) => {
   }
 });
 
+// Staff Decline
+app.post('/outpass/:id/staff-decline', async (req, res) => {
+  const id = req.params.id;
+  try {
+    // Update staff approval status in the database
+    const updateQuery = `
+      UPDATE outpass
+      SET status = 'Staff Declined'
+      WHERE id = $1;
+    `;
+    await client.query(updateQuery, [id]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error approving outpass:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while approving outpass' });
+  }
+});
+
 
 
 app.post('/outpass/:id/decline', async (req, res) => {
