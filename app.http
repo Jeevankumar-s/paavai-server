@@ -11,10 +11,5 @@ Content-Type: application/json
     "reason":"veetuku poganum"
 }
 
-###
-POST http://localhost:3305/outpass/11/accept
-
-###
-GET http://localhost:3305/history 
 
 
