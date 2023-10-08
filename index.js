@@ -239,10 +239,11 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     
 
     doc.moveDown(2);
+    
 
 
     const studentNameWidth = doc.widthOfString(`Student Name: ${studentName}`);
-    const studentNameX = (doc.page.width - studentNameWidth) / 2.2;
+    const studentNameX = (doc.page.width - studentNameWidth) / 2.1;
 
     const istTime = new Date();
     const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });    
@@ -257,9 +258,29 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.fontSize(20).text(`Reason: ${reason}`);
     doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
-    
+    doc.moveDown(5);
+
+    // Load the checkmark image
+const checkmarkImagePath = './images/tick.png'; // Replace with the actual path to your checkmark image
+const checkmarkImage = fs.readFileSync(checkmarkImagePath);
+
+// Calculate the X-coordinate for the checkmark image (centered above the text)
+const centerX = doc.page.width / 2;
+const checkmarkWidth = 40; // Adjust the width of the checkmark image
+const checkmarkX = centerX - checkmarkWidth / 2;
+
+const yPosText = doc.page.height - 30; // Y-coordinate for the text
+const yPosCheckmark = yPosText - 160; // Y-coordinate for the checkmark (adjust the value as needed)
+
+// Add the checkmark image above the text
+doc.image(checkmarkImage, checkmarkX+65, yPosCheckmark, { width: checkmarkWidth });
+doc.image(checkmarkImage, checkmarkX+200, yPosCheckmark, { width: checkmarkWidth });
+
+// Add the "Staff Sign" and "HOD Sign" text
+doc.text('Staff Sign    HOD Sign', { align: 'center', width: doc.page.width - 170, y: yPosText, x: doc.page.width - 110 }); // Adjust the 'x' value as needed
 
 
+  
     const watermarkText = 'PAAVAI OUTPASS';
 
     const watermarkWidth = doc.widthOfString(watermarkText);
@@ -278,23 +299,17 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
 
   doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'center' });
 
-  const staffSignWidth = doc.widthOfString('Staff Sign');
-  const hodSignWidth = doc.widthOfString('HOD Sign');
   
   // Determine the available width for both labels
-  const availableWidth = doc.page.width - 2 * 50; // Adjust as needed
   
+// Add these lines after all other content is added
+
   // Calculate the X-coordinates for both labels to center them
-  const staffSignX = (availableWidth - staffSignWidth - hodSignWidth) / 2 + 50;
-  const hodSignX = staffSignX + staffSignWidth + 20; // Adjust as needed
   
   // Set the Y-coordinate for both labels
-  const signY = doc.page.height - 40; // Adjust as needed
   
-  doc.fontSize(12).text('Staff Sign', staffSignX, signY);
-  doc.fontSize(12).text('HOD Sign', hodSignX, signY);
-       const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
-    doc.pipe(fs.createWriteStream(pdfPath)); 
+    //    const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    // doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
 
@@ -321,8 +336,8 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     };
 
 
-    // const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
-    // await sendMailAsync(mailOptions);
+    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+    await sendMailAsync(mailOptions);
 
 
     console.log('Email sent successfully.');
