@@ -327,7 +327,7 @@ app.post('/outpass/:id/accept', async (req, res) => {
 
     const updateQuery = `
       UPDATE outpass
-      SET status = 'accepted'
+      SET status = 'HOD Accepted'
       WHERE id = $1
       RETURNING *;
     `;
@@ -406,7 +406,7 @@ app.post('/outpass/:id/decline', async (req, res) => {
   try {
     const updateQuery = `
       UPDATE outpass
-      SET status = 'declined'
+      SET status = 'HOD Declined'
       WHERE id = $1;
     `;
     await client.query(updateQuery, [id]);
