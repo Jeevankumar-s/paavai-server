@@ -18,11 +18,4 @@ POST http://localhost:3305/outpass/59090713-f03e-4b90-a0dc-5789d386da8f/staff-ap
 GET http://localhost:3305/history 
 
 ###
-POST http://localhost:3305/register 
-Content-Type: application/json
-
-{
-    "username":"poppy",
-    "password":"poppy",
-    "user":"hod"
-}
+POST http://localhost:3305/deletee

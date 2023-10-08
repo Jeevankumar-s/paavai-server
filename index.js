@@ -398,7 +398,29 @@ app.post('/outpass/:id/staff-decline', async (req, res) => {
   }
 });
 
+// app.post('/deletee',async(req,res)=>{
+//   const deleteQuery = `
+//   DELETE FROM outpass
+//   WHERE registernumber = '20104035';
+// `;
+// await client.query(deleteQuery);
+// res.json({ success: true });
+// })
 
+app.post('/deletee', async (req, res) => {
+
+  try {
+    const deleteQuery = `
+    DELETE FROM outpass
+    WHERE registernumber = '20104036';
+  `;
+    await client.query(deleteQuery);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error declining outpass:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while declining outpass' });
+  }
+});
 
 app.post('/outpass/:id/decline', async (req, res) => {
   const id = parseInt(req.params.id);
