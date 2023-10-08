@@ -277,7 +277,7 @@ doc.image(checkmarkImage, checkmarkX+65, yPosCheckmark, { width: checkmarkWidth 
 doc.image(checkmarkImage, checkmarkX+200, yPosCheckmark, { width: checkmarkWidth });
 
 // Add the "Staff Sign" and "HOD Sign" text
-doc.text('Staff Sign    HOD Sign', { align: 'center', width: doc.page.width - 170, y: yPosText, x: doc.page.width - 110 }); // Adjust the 'x' value as needed
+doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 170, y: yPosText, x: doc.page.width - 110 }); // Adjust the 'x' value as needed
 
 
   
