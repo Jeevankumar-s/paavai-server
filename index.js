@@ -242,7 +242,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
 
 
     const studentNameWidth = doc.widthOfString(`Student Name: ${studentName}`);
-    const studentNameX = (doc.page.width - studentNameWidth) / 2;
+    const studentNameX = (doc.page.width - studentNameWidth) / 2.2;
 
     const istTime = new Date();
     const formattedIstTime = format(istTime, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'Asia/Kolkata' });    
@@ -257,6 +257,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.fontSize(20).text(`Reason: ${reason}`);
     doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
+    
 
 
     const watermarkText = 'PAAVAI OUTPASS';
@@ -265,7 +266,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     const watermarkHeight = doc.currentLineHeight();
     const watermarkX = (doc.page.width - watermarkWidth) / 3.9;
     const watermarkY = (doc.page.height - watermarkHeight) / 1.5;
-
+   
     const watermarkRotation = -45; // Negative angle for left tilt
 
     doc.rotate(watermarkRotation, { origin: [watermarkX, watermarkY] })
@@ -277,8 +278,23 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
 
   doc.fontSize(12).text(`Digital Signature: ${signature}`,{ align: 'center' });
 
-    //    const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
-    // doc.pipe(fs.createWriteStream(pdfPath)); 
+  const staffSignWidth = doc.widthOfString('Staff Sign');
+  const hodSignWidth = doc.widthOfString('HOD Sign');
+  
+  // Determine the available width for both labels
+  const availableWidth = doc.page.width - 2 * 50; // Adjust as needed
+  
+  // Calculate the X-coordinates for both labels to center them
+  const staffSignX = (availableWidth - staffSignWidth - hodSignWidth) / 2 + 50;
+  const hodSignX = staffSignX + staffSignWidth + 20; // Adjust as needed
+  
+  // Set the Y-coordinate for both labels
+  const signY = doc.page.height - 40; // Adjust as needed
+  
+  doc.fontSize(12).text('Staff Sign', staffSignX, signY);
+  doc.fontSize(12).text('HOD Sign', hodSignX, signY);
+       const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
 
@@ -305,9 +321,9 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     };
 
 
-    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+    // const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+    // await sendMailAsync(mailOptions);
 
-    await sendMailAsync(mailOptions);
 
     console.log('Email sent successfully.');
   } catch (error) {
@@ -407,20 +423,20 @@ app.post('/outpass/:id/staff-decline', async (req, res) => {
 // res.json({ success: true });
 // })
 
-app.post('/deletee', async (req, res) => {
+// app.post('/deletee', async (req, res) => {
 
-  try {
-    const deleteQuery = `
-    DELETE FROM outpass
-    WHERE registernumber = '20104036';
-  `;
-    await client.query(deleteQuery);
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error declining outpass:', error);
-    res.status(500).json({ success: false, message: 'An error occurred while declining outpass' });
-  }
-});
+//   try {
+//     const deleteQuery = `
+//     DELETE FROM outpass
+//     WHERE registernumber = '20104036';
+//   `;
+//     await client.query(deleteQuery);
+//     res.json({ success: true });
+//   } catch (error) {
+//     console.error('Error declining outpass:', error);
+//     res.status(500).json({ success: false, message: 'An error occurred while declining outpass' });
+//   }
+// });
 
 app.post('/outpass/:id/decline', async (req, res) => {
   const id = parseInt(req.params.id);
