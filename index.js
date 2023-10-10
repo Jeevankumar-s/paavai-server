@@ -270,7 +270,7 @@ const checkmarkWidth = 40; // Adjust the width of the checkmark image
 const checkmarkX = centerX - checkmarkWidth / 2;
 
 const yPosText = doc.page.height - 30; // Y-coordinate for the text
-const yPosCheckmark = yPosText - 200; // Y-coordinate for the checkmark (adjust the value as needed)
+const yPosCheckmark = yPosText - 185; // Y-coordinate for the checkmark (adjust the value as needed)
 
 // Add the checkmark image above the text
 doc.image(checkmarkImage, checkmarkX+20, yPosCheckmark, { width: checkmarkWidth });
