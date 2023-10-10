@@ -308,8 +308,8 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
   
   // Set the Y-coordinate for both labels
   
-       const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
-    doc.pipe(fs.createWriteStream(pdfPath)); 
+    //    const pdfPath = './outpass_acceptance.pdf'; // Define the file path where you want to save the PDF
+    // doc.pipe(fs.createWriteStream(pdfPath)); 
     doc.end();
 
 
@@ -336,8 +336,8 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
     };
 
 
-    // const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
-    // await sendMailAsync(mailOptions);
+    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+    await sendMailAsync(mailOptions);
 
 
     console.log('Email sent successfully.');
