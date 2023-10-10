@@ -270,11 +270,11 @@ const checkmarkWidth = 40; // Adjust the width of the checkmark image
 const checkmarkX = centerX - checkmarkWidth / 2;
 
 const yPosText = doc.page.height - 30; // Y-coordinate for the text
-const yPosCheckmark = yPosText - 160; // Y-coordinate for the checkmark (adjust the value as needed)
+const yPosCheckmark = yPosText - 120; // Y-coordinate for the checkmark (adjust the value as needed)
 
 // Add the checkmark image above the text
-doc.image(checkmarkImage, checkmarkX+25, yPosCheckmark, { width: checkmarkWidth });
-doc.image(checkmarkImage, checkmarkX+150, yPosCheckmark, { width: checkmarkWidth });
+doc.image(checkmarkImage, checkmarkX+20, yPosCheckmark, { width: checkmarkWidth });
+doc.image(checkmarkImage, checkmarkX+140, yPosCheckmark, { width: checkmarkWidth });
 
 // Add the "Staff Sign" and "HOD Sign" text
 doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 170, y: yPosText, x: doc.page.width - 110 }); // Adjust the 'x' value as needed
