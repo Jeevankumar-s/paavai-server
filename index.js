@@ -35,20 +35,28 @@ client
   .then(() => {
     console.log('Connected to the database');
     // Create the "login" table if it doesn't exist.
+    // const createTableQuery = `
+    // CREATE TABLE IF NOT EXISTS outpass (
+    //   id TEXT PRIMARY KEY,
+    //   name VARCHAR(255) NOT NULL,
+    //   registernumber VARCHAR(20) NOT NULL,
+    //   email VARCHAR(255) NOT NULL,
+    //   year VARCHAR(20) NOT NULL,
+    //   department VARCHAR(255) NOT NULL,
+    //   semester VARCHAR(20) NOT NULL,
+    //   reason TEXT NOT NULL,
+    //   current_datetime  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
+    //   status VARCHAR(20) NOT NULL
+    // );
+    // `;
     const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS outpass (
-      id TEXT PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      registernumber VARCHAR(20) NOT NULL,
-      email VARCHAR(255) NOT NULL,
-      year VARCHAR(20) NOT NULL,
-      department VARCHAR(255) NOT NULL,
-      semester VARCHAR(20) NOT NULL,
-      reason TEXT NOT NULL,
-      current_datetime  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
-      status VARCHAR(20) NOT NULL
-    );
-    `;
+  CREATE TABLE IF NOT EXISTS login (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    type VARCHAR(20) NOT NULL
+  );
+`;
       
    
 

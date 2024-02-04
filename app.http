@@ -15,5 +15,51 @@ Content-Type: application/json
 ###
 POST http://localhost:3305/outpass/11/accept 
 
+###
+POST http://localhost:3305/register 
+Content-Type: application/json
+
+{
+    "username":"12847",
+    "password":"gopinath",
+    "user":"student"
+}
+
+###
+POST http://localhost:3305/register 
+Content-Type: application/json
+
+{
+    "username":"sangeetha",
+    "password":"sangeetha",
+    "user":"hod"
+}
+###
+POST http://localhost:3305/register 
+Content-Type: application/json
+
+{
+    "username":"12847",
+    "password":"gopinath",
+    "user":"student"
+}
+###
+POST http://localhost:3305/register 
+Content-Type: application/json
+
+{
+    "username":"12847",
+    "password":"gopinath",
+    "user":"student"
+}
+###
+POST http://localhost:3305/login 
+Content-Type: application/json
+
+{
+    "username":"12847",
+    "password":"gopinath"
+}
+
 
 
