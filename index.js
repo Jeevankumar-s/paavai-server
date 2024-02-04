@@ -73,8 +73,8 @@ client
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user:"paavaioutpass@gmail.com",
-      pass: "iiua xnjs iwny krmg",
+      user:"srivasavicollegeoutpass@gmail.com",
+      pass: "nopc dpxc johd nvte",
     },
   });
 
@@ -219,8 +219,8 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.font('./fonts/arial.ttf');
     doc.font('./fonts/ARIBL0.ttf');
 
-    const collegeLogoPath = './images/paavailogo.jpeg'; 
-    const backgroundImagePath = './images/output-onlinepngtools.png';
+    const collegeLogoPath = './images/vasavilogo.png'; 
+    const backgroundImagePath = 'https://res.cloudinary.com/dprxsgnqn/image/upload/v1707046057/WhatsApp_Image_2024-02-04_at_16.53.30_61c29527_hxr6eo.jpg';
     const backgroundImage = fs.readFileSync(backgroundImagePath);
 
     const logoImage = fs.readFileSync(collegeLogoPath);
@@ -228,9 +228,8 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.image(backgroundImage, 40, 140, { width: 612-80, height: 792-180 ,opacity: 0.1});
     
     doc.moveUp(2)
-    doc.fontSize(20).text('PAAVAI ENGINNERING COLLEGE', { align: 'center',bold: true, y: -30});
-    doc.fontSize(17).text('(AUTONOMOUS)', { align: 'center' });
-    doc.fontSize(14).text('NH-44, Pachal, Namakkal,Tamilnadu-627018 ', { align: 'center' });
+    doc.fontSize(20).text('SRI VASAVI COLLEGE', { align: 'center',bold: true, y: -30});
+    doc.fontSize(14).text('Erode,Tamilnadu-638316 ', { align: 'center' });
     const lineStartX = 30; // Adjust the X-coordinate as needed
     const lineStartY = doc.y + 30; // Adjust the Y-coordinate to position the line below the text
     const lineEndX = doc.page.width - 30; // Adjust the X-coordinate for the line's end point
