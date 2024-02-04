@@ -220,7 +220,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.font('./fonts/ARIBL0.ttf');
 
     const collegeLogoPath = './images/vasavilogo.png'; 
-    const backgroundImagePath = 'https://res.cloudinary.com/dprxsgnqn/image/upload/v1707046057/WhatsApp_Image_2024-02-04_at_16.53.30_61c29527_hxr6eo.jpg';
+    const backgroundImagePath = './images/vasavicollege.png';
     const backgroundImage = fs.readFileSync(backgroundImagePath);
 
     const logoImage = fs.readFileSync(collegeLogoPath);
@@ -288,7 +288,7 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
 
 
   
-    const watermarkText = 'PAAVAI OUTPASS';
+    const watermarkText = 'VASAVI OUTPASS';
 
     const watermarkWidth = doc.widthOfString(watermarkText);
     const watermarkHeight = doc.currentLineHeight();

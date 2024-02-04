@@ -13,7 +13,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3305/outpass/11/accept 
+POST http://localhost:3305/outpass/a41edc3a-a667-4d48-b9f4-02d7532030ca/accept
 
 ###
 POST http://localhost:3305/register 
@@ -62,4 +62,5 @@ Content-Type: application/json
 }
 
 
-
+###
+GET http://localhost:3305/history 
