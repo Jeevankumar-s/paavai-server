@@ -12,4 +12,8 @@ Content-Type: application/json
 }
 
 
+###
+POST http://localhost:3305/outpass/11/accept 
+
+
 

@@ -119,7 +119,7 @@ app.post('/login', async (req, res) => {
       const user=result.rows
        const userType=user[0].type
       // Passwords match, so you can consider it as correct.
-      const jwtToken = jwt.sign({ username }, "JEEVANKUMARKIRUTHIKA", { expiresIn: '1h' });
+      const jwtToken = jwt.sign({ username }, "JEEVANKUMAR", { expiresIn: '1h' });
       res.status(201).send({ jeevToken: jwtToken,userType:userType,validation:true});
     } else {
       // Passwords do not match.
@@ -270,7 +270,7 @@ const checkmarkWidth = 40; // Adjust the width of the checkmark image
 const checkmarkX = centerX - checkmarkWidth / 2;
 
 const yPosText = doc.page.height - 30; // Y-coordinate for the text
-const yPosCheckmark = yPosText - 185; // Y-coordinate for the checkmark (adjust the value as needed)
+const yPosCheckmark = yPosText - 180; // Y-coordinate for the checkmark (adjust the value as needed)
 
 // Add the checkmark image above the text
 doc.image(checkmarkImage, checkmarkX+20, yPosCheckmark, { width: checkmarkWidth });

@@ -19,6 +19,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.5",
+    "pdf-lib": "^1.17.1",
     "pdfkit": "^0.13.0",
     "pg": "^8.11.3",
     "pg-promise": "^11.5.4",
