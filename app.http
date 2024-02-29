@@ -1,4 +1,4 @@
-POST http://localhost:3305/outpass 
+POST http://localhost:3305/outpass1
 Content-Type: application/json
 
 {
@@ -13,16 +13,16 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3305/outpass/a41edc3a-a667-4d48-b9f4-02d7532030ca/accept
+POST http://localhost:3305/outpass1/d3f42641-ba2a-42b7-aa45-87daafc10b9e/accept
 
 ###
-POST http://localhost:3305/register 
+POST http://localhost:3305/register1 
 Content-Type: application/json
 
 {
-    "username":"12847",
-    "password":"gopinath",
-    "user":"student"
+    "username":"parimalam",
+    "password":"Parimalam",
+    "user":"hod"
 }
 
 ###
@@ -53,14 +53,14 @@ Content-Type: application/json
     "user":"student"
 }
 ###
-POST http://localhost:3305/login 
+POST http://localhost:3305/login1
 Content-Type: application/json
 
 {
-    "username":"12847",
-    "password":"gopinath"
+    "username":"deepa",
+    "password":"deepa"
 }
 
 
 ###
-GET http://localhost:3305/history 
+GET http://localhost:3305/history1 
