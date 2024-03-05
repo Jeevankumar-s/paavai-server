@@ -1,10 +1,10 @@
-POST http://localhost:3305/outpass1
+POST http://localhost:3305/outpass2
 Content-Type: application/json
 
 {
-    "name":"jeevan", 
-    "registernumber":"20104035", 
-    "email":"jeevenkumar2003@gmail.com", 
+    "name":"pradhap", 
+    "registernumber":"2K21CA036", 
+    "email":"04pradhap@gmail.com", 
     "year":"IV", 
     "department":"CSE", 
     "semester":"VII", 
@@ -13,16 +13,23 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3305/outpass1/d3f42641-ba2a-42b7-aa45-87daafc10b9e/accept
+POST http://localhost:3305/outpass2/0c7d45bf-070e-4ad0-8cd2-6d3bc95c0b69/accept
 
 ###
-POST http://localhost:3305/register1 
+POST http://localhost:3305/register2 
 Content-Type: application/json
 
 {
-    "username":"parimalam",
-    "password":"Parimalam",
-    "user":"hod"
+    "username":"2K21CA03",
+    "password":"arun",
+    "user":"student"
+}
+###
+POST http://localhost:3305/delete 
+Content-Type: application/json
+
+{
+    "username":"parimalam"
 }
 
 ###
