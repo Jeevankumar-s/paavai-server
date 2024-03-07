@@ -797,8 +797,8 @@ const sendAcceptanceEmail2 = async (studentEmail, id, studentName, registerNo, d
     
     doc.moveUp(2)
     doc.fontSize(20).text('VYSYA ARTS AND SCIENCE COLLEGE', { align: 'center',bold: true, y: -30});
-    doc.fontSize(14).text('Ammapet,', { align: 'center' });
-    doc.fontSize(14).text('Salem, Tamilnadu-636003 ', { align: 'center' });
+    doc.fontSize(14).text('Masinaixkenpatty, Ayodhiyapattinam (P.O),', { align: 'center' });
+    doc.fontSize(14).text('Salem, Tamilnadu-636 103 ', { align: 'center' });
     const lineStartX = 30; // Adjust the X-coordinate as needed
     const lineStartY = doc.y + 30; // Adjust the Y-coordinate to position the line below the text
     const lineEndX = doc.page.width - 30; // Adjust the X-coordinate for the line's end point
