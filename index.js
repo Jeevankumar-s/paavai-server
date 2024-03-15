@@ -490,7 +490,7 @@ app.get('/outpass2/:id', async (req, res) =>{
   res.send(results.rows)
 })
 
-const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, department, year,reason) => {
+const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo,semester, department, year,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -541,6 +541,7 @@ const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo, de
     doc.fontSize(20).text(`Register No : ${registerNo}`);
     doc.fontSize(20).text(`Department : ${department}`);
     doc.fontSize(20).text(`Year : ${year}`);
+    doc.fontSize(20).text(`Semester : ${semester}`);
     doc.fontSize(20).text(`Reason: ${reason}`);
     doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
@@ -634,7 +635,7 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
 
 //for new college 
 
-const sendAcceptanceEmail1 = async (studentEmail, id, studentName, registerNo, department, year,reason) => {
+const sendAcceptanceEmail1 = async (studentEmail, id, studentName, registerNo,semester, department, year,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -686,6 +687,7 @@ const sendAcceptanceEmail1 = async (studentEmail, id, studentName, registerNo, d
     doc.fontSize(20).text(`Register No : ${registerNo}`);
     doc.fontSize(20).text(`Department : ${department}`);
     doc.fontSize(20).text(`Year : ${year}`);
+    doc.fontSize(20).text(`Semester : ${semester}`);
     doc.fontSize(20).text(`Reason: ${reason}`);
     doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
@@ -779,7 +781,7 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
 
 // for pradhap college 
 
-const sendAcceptanceEmail2 = async (studentEmail, id, studentName, registerNo, department, year,reason) => {
+const sendAcceptanceEmail2 = async (studentEmail, id, studentName, registerNo, semester,department, year,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -831,6 +833,7 @@ const sendAcceptanceEmail2 = async (studentEmail, id, studentName, registerNo, d
     doc.fontSize(20).text(`Register No : ${registerNo}`);
     doc.fontSize(20).text(`Department : ${department}`);
     doc.fontSize(20).text(`Year : ${year}`);
+    doc.fontSize(20).text(`Semester : ${semester}`);
     doc.fontSize(20).text(`Reason: ${reason}`);
     doc.fontSize(20).text(`Date and Time of Acceptance: ${formattedIstTime}`);
     
