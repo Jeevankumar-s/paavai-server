@@ -490,7 +490,7 @@ app.get('/outpass2/:id', async (req, res) =>{
   res.send(results.rows)
 })
 
-const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo,semester, department, year,reason) => {
+const sendAcceptanceEmail = async (studentEmail, id, studentName, registerNo,department, year,semester,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -635,7 +635,7 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
 
 //for new college 
 
-const sendAcceptanceEmail1 = async (studentEmail, id, studentName, registerNo,semester, department, year,reason) => {
+const sendAcceptanceEmail1 = async (studentEmail, id, studentName, registerNo,department, year,semester,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -781,7 +781,7 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
 
 // for pradhap college 
 
-const sendAcceptanceEmail2 = async (studentEmail, id, studentName, registerNo, semester,department, year,reason) => {
+const sendAcceptanceEmail2 = async (studentEmail, id, studentName, registerNo,department, year,semester,reason) => {
   const doc = new PDFDocument();
 
   try {
@@ -925,10 +925,6 @@ doc.text('Tutor Sign    HOD Sign', { align: 'center', width: doc.page.width - 17
   }
 };
 
-
-
- 
-
 app.post('/outpass/:id/accept', async (req, res) => {
   const id = req.params.id;
 
@@ -962,7 +958,7 @@ app.post('/outpass/:id/accept', async (req, res) => {
     }
 
 
-    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year,outpass.reason);
+    await sendAcceptanceEmail(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year,outpass.semester,outpass.reason);
 
 
     res.json({ success: true, email: outpass.email});
@@ -1007,7 +1003,7 @@ app.post('/outpass1/:id/accept', async (req, res) => {
     }
 
 
-    await sendAcceptanceEmail1(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year,outpass.reason);
+    await sendAcceptanceEmail1(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.semester,outpass.year,outpass.reason);
 
 
     res.json({ success: true, email: outpass.email});
@@ -1052,7 +1048,7 @@ app.post('/outpass2/:id/accept', async (req, res) => {
     }
 
 
-    await sendAcceptanceEmail2(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year,outpass.reason);
+    await sendAcceptanceEmail2(outpass.email, id, outpass.name, outpass.registernumber,outpass.department,outpass.year,outpass.semester,outpass.reason);
 
 
     res.json({ success: true, email: outpass.email});
